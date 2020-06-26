@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'DiceRoller.dart';
 
 void main() => runApp(MaterialApp(
       home: Scaffold(
@@ -17,48 +17,53 @@ class JDice extends StatefulWidget {
   _JDiceState createState() => _JDiceState();
 }
 
-class _JDiceState extends State<JDice> {
-  int DUpLef = 1;
-  int DUpRi = 1;
-  int DLoLef = 1;
-  int DLoRi = 1;
-  int DCen = 1;
+String diceStatus = 'ROLLEM';
 
-  void randomizeDice(){
-    setState(() {
-      DUpLef = Random().nextInt(6) + 1;
-      DUpRi = Random().nextInt(6) + 1;
-      DLoLef = Random().nextInt(6) + 1;
-      DLoRi = Random().nextInt(6) + 1;
-      DCen = Random().nextInt(6) + 1;
-    });
-  }
+class _JDiceState extends State<JDice> {
+  DiceRoller diceRoller = DiceRoller();
 
   @override
   Widget build(BuildContext context) {
+    void update() {
+      setState(() {
+        diceStatus = diceRoller.randomizeDice();
+      });
+    }
+
     return Center(
       child: Column(
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '$diceStatus',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           Row(
             children: <Widget>[
               Expanded(
                 child: FlatButton(
-                  onPressed: randomizeDice,
+                  onPressed: update,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image(
-                      image: AssetImage('images/dice$DUpLef.png'),
+                      image: AssetImage('images/dice${diceRoller.dUpLef}.png'),
                     ),
                   ),
                 ),
               ),
               Expanded(
                 child: FlatButton(
-                  onPressed: randomizeDice,
+                  onPressed: update,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image(
-                      image: AssetImage('images/dice$DUpRi.png'),
+                      image: AssetImage('images/dice${diceRoller.dUpRi}.png'),
                     ),
                   ),
                 ),
@@ -69,21 +74,21 @@ class _JDiceState extends State<JDice> {
             children: <Widget>[
               Expanded(
                   child: FlatButton(
-                    onPressed: randomizeDice,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image(
-                        image: AssetImage('images/dice$DLoLef.png'),
-                      ),
-                    ),
-                  )),
+                onPressed: update,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image(
+                    image: AssetImage('images/dice${diceRoller.dLoLef}.png'),
+                  ),
+                ),
+              )),
               Expanded(
                 child: FlatButton(
-                  onPressed: randomizeDice,
+                  onPressed: update,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image(
-                      image: AssetImage('images/dice$DLoRi.png'),
+                      image: AssetImage('images/dice${diceRoller.dLoRi}.png'),
                     ),
                   ),
                 ),
@@ -93,11 +98,11 @@ class _JDiceState extends State<JDice> {
           Expanded(
             flex: 1,
             child: FlatButton(
-              onPressed: randomizeDice,
+              onPressed: update,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image(
-                  image: AssetImage('images/dice$DCen.png'),
+                  image: AssetImage('images/dice${diceRoller.dCen}.png'),
                 ),
               ),
             ),
